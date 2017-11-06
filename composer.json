@@ -1,6 +1,6 @@
 {
     "require": {
-        "monolog/monolog": "1.0.*"
+      "illuminate/database": "5.1.8"
     },
     "autoload": {
       "psr-4": {
