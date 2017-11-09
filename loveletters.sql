@@ -20,7 +20,7 @@ CREATE TABLE Defausse
 	idDefausse integer(10) primary key not null,
 	idJoueur integer(10) not null,
 	foreign key (idJoueur) references Joueur(idJoueur)
-);
+) INHERITS (Carte);
 
 CREATE TABLE Carte
 (
