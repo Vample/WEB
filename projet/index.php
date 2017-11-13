@@ -3,9 +3,9 @@
 require 'vendor/autoload.php';
 use \loveletters\controler\ControlerTest;
 
-echo '<meta charset="UTF-8">';
-
 $app = new \Slim\Slim();
+
+$app->get('/css',function(){})->name('css');
 
 $app->get('/', function(){
 	(new ControlerTest())->index();

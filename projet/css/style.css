@@ -1,0 +1,54 @@
+@font-face{
+  font-family: 'creepshow';
+  src: url('fonts/Creepshow.ttf');
+}
+
+@font-face{
+  font-family: 'northwood-high';
+  src: url('fonts/Northwood High.ttf');
+}
+
+/** Carte **/
+.carte{
+  width: 187px;
+  height: 251px;
+  padding: 0;
+  margin: 0 5px 5px 0;
+  float: left;
+}
+
+.rang{
+  background-image: url('../img/rang.png');
+  margin-top: -7px;
+  margin-left: -10px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+
+.rang h2{
+  margin-left: 18px;
+  margin-top: 12px;
+  font-family: northwood-high;
+}
+
+.nom{
+  margin-top: 0px;
+  text-align: center;
+  font-family: creepshow;
+}
+
+.effet{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-top: 150px;
+  height: 66px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: justify;
+  font-size: 13px;
+  font-family: northwood-high;
+}
