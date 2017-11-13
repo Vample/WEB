@@ -1,51 +1,32 @@
 CREATE TABLE Utilisateur
 (
-	idUtilisateur integer(10) primary key not null,
+	idUtilisateur int primary key not null,
 	login varchar(25),
 	pwd varchar(25)
 );
 
 CREATE TABLE Joueur
 (
-	idJoueur integer(10) primary key not null,
-	idUtilisateur integer(10) not null,
-	score integer(10),
+	idJoueur int primary key not null,
+	idUtilisateur int not null,
+	score int,
 	foreign key (idUtilisateur) references Utilisateur(idUtilisateur)
-);
-
-CREATE TABLE Defausse
-(
-	idDefausse integer(10) primary key not null,
-	idJoueur integer(10),
-	idManche integer(10) not null,
-	foreign key (idJoueur) references Joueur(idJoueur),
-	foreign key (idManche) references Manche(idManche)
-);
-
-CREATE TABLE EstPlacee
-(
-	idDefausse integer(10) not null,
-	idCarte integer(10) not null,
-	nbCartes integer(10) not null,
-	primary key (idDefausse, idCarte),
-	foreign key (idDefausse) references Defausse(idDefausse),
-	foreign key (idCarte) references Carte(idCarte)
 );
 
 CREATE TABLE Carte
 (
-	idCarte integer(10) primary key not null,
+	idCarte int primary key not null,
 	nom varchar(10),
-	rang integer(10),
-	url_illus varchar(25),
+	rang int,
+	url_illus varchar(200),
 	effet varchar(25)
 );
 
 CREATE TABLE Possede
 (
-	idJoueur integer(10) not null,
-	idCarte integer(10) not null,
-	nbCartes integer(10),
+	idJoueur int not null,
+	idCarte int not null,
+	nbCartes int,
 	primary key (idJoueur, idCarte),
 	foreign key (idCarte) references Carte(idCarte),
 	foreign key (idJoueur) references Joueur(idJoueur)
@@ -53,37 +34,56 @@ CREATE TABLE Possede
 
 CREATE TABLE Pioche
 (
-	idPioche integer(10) primary key not null
+	idPioche int primary key not null
 );
 
 CREATE TABLE Comporte
 (
-	idPioche integer(10) not null,
-	idCarte integer(10) not null,
-	nbCartes integer(10),
+	idPioche int not null,
+	idCarte int not null,
+	nbCartes int,
 	primary key (idPioche, idCarte),
 	foreign key (idPioche) references Pioche(idPioche),
 	foreign key (idCarte) references Carte(idCarte)
 );
 
+CREATE TABLE Partie
+(
+	idPartie int primary key not null
+);
+
 CREATE TABLE Manche
 (
-	idManche integer(10) primary key not null,
-	idPartie integer(10) not null,
-	idPioche integer(10) not null,
+	idManche int primary key not null,
+	idPartie int not null,
+	idPioche int not null,
 	foreign key(idPioche) references Pioche(idPioche),
 	foreign key(idPartie) references Partie(idPartie)
 );
 
-CREATE TABLE Partie
+CREATE TABLE Defausse
 (
-	idPartie integer(10) primary key not null
+	idDefausse int primary key not null,
+	idJoueur int,
+	idManche int not null,
+	foreign key (idJoueur) references Joueur(idJoueur),
+	foreign key (idManche) references Manche(idManche)
+);
+
+CREATE TABLE EstPlacee
+(
+	idDefausse int not null,
+	idCarte int not null,
+	nbCartes int not null,
+	primary key (idDefausse, idCarte),
+	foreign key (idDefausse) references Defausse(idDefausse),
+	foreign key (idCarte) references Carte(idCarte)
 );
 
 CREATE TABLE Participe
 (
-	idJoueur integer(10) not null,
-	idManche integer(10) not null,
+	idJoueur int not null,
+	idManche int not null,
 	primary key(idJoueur, idManche),
 	foreign key(idJoueur) references Joueur(idJoueur),
 	foreign key(idManche) references Manche(idManche)

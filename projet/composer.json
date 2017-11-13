@@ -5,7 +5,7 @@
     "illuminate/database": "5.0.*",
 	"ircmaxell/password-compat": "1.0.*", 
 	"slim/slim": "2.*",
-    "php": ">=7.0.0"
+    "php": ">=5.5.9"
   },
   "autoload": {
     "psr-0": {

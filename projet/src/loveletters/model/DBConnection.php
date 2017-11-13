@@ -11,7 +11,7 @@ class DBConnection{
 		$db = new DB();
 		$db->addConnection( [
 				'driver' => 'mysql',
-				'host' => 'localhost',
+				'host' => 'sql11.freemysqlhosting.net',
 				'database' => $config['dsn'],
 				'username' => $config['user'],
 				'password' => $config['password'],
