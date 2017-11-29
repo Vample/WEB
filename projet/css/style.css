@@ -12,12 +12,53 @@ body{
   background-color: #282828;
 }
 
+h2{
+  text-shadow: 2px 2px 2px black;
+}
+
 .brand-logo{
+  text-shadow: 2px 2px 2px black;
   font-family: creepshow;
 }
 
 .menu-item{
+  text-shadow: 2px 2px 2px black;
   font-family: creepshow;
+}
+
+.inscription{
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: white;
+  height: 515px;
+}
+
+.galerie{
+  float: left;
+  width: 420px;
+}
+
+.profile_pictures{
+  float: left;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 2px;
+  margin-bottom: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: white;
+}
+
+.selected{
+  border-color: #1E90FF;
+}
+
+.formulaire_inscription{
+  margin-left: 420px;
 }
 
 /** Carte **/
