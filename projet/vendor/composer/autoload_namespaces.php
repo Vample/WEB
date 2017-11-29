@@ -9,5 +9,4 @@ return array(
     'loveletters' => array($baseDir . '/src'),
     'conf' => array($baseDir . '/src'),
     'Slim' => array($vendorDir . '/slim/slim'),
-    'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
 );

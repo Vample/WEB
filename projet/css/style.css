@@ -12,6 +12,14 @@ body{
   background-color: #282828;
 }
 
+.brand-logo{
+  font-family: creepshow;
+}
+
+.menu-item{
+  font-family: creepshow;
+}
+
 /** Carte **/
 .carte{
   width: 187px;

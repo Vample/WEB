@@ -1,8 +1,9 @@
 CREATE TABLE Utilisateur
 (
 	idUtilisateur int primary key not null AUTO_INCREMENT,
-	login varchar(25),
-	pwd varchar(25)
+	idImg int not null,
+	login varchar(25) not null,
+	pwd varchar(25) not null
 );
 
 CREATE TABLE Joueur

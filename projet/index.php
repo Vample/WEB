@@ -1,14 +1,20 @@
 <?php
 
 require 'vendor/autoload.php';
-use \loveletters\controler\ControlerTest;
+use \loveletters\controler\ControlerJeu;
 
 $app = new \Slim\Slim();
 
 $app->get('/css',function(){})->name('css');
+$app->get('/js',function(){})->name('js');
+$app->get('/materialize',function(){})->name('materialize');
 
 $app->get('/', function(){
-	(new ControlerTest())->index();
+	(new ControlerJeu())->index();
 })->name('racine');
+
+$app->get('/inscription/', function(){
+	(new ControlerJeu())->inscription();
+})->name('inscription');
 
 $app->run();

@@ -27,6 +27,10 @@ class ComposerStaticInit974b8e5a06a6d918e3fad2b61fe3fa81
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
         ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Inflector\\' => 26,
+        ),
         'C' => 
         array (
             'Carbon\\' => 7,
@@ -62,6 +66,10 @@ class ComposerStaticInit974b8e5a06a6d918e3fad2b61fe3fa81
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
+        'Doctrine\\Common\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
@@ -88,13 +96,6 @@ class ComposerStaticInit974b8e5a06a6d918e3fad2b61fe3fa81
             'Slim' => 
             array (
                 0 => __DIR__ . '/..' . '/slim/slim',
-            ),
-        ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Inflector\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
             ),
         ),
     );
