@@ -24,10 +24,10 @@ CREATE TABLE Carte
 
 CREATE TABLE Possede
 (
+	idPossede int primary key not null,
 	idJoueur int not null,
 	idCarte int not null,
 	nbCartes int,
-	primary key (idJoueur, idCarte),
 	foreign key (idCarte) references Carte(idCarte),
 	foreign key (idJoueur) references Joueur(idJoueur)
 );
@@ -39,10 +39,10 @@ CREATE TABLE Pioche
 
 CREATE TABLE Comporte
 (
+	idComporte int primary key not null,
 	idPioche int not null,
 	idCarte int not null,
 	nbCartes int,
-	primary key (idPioche, idCarte),
 	foreign key (idPioche) references Pioche(idPioche),
 	foreign key (idCarte) references Carte(idCarte)
 );
@@ -72,19 +72,19 @@ CREATE TABLE Defausse
 
 CREATE TABLE EstPlacee
 (
-	idDefausse int not null AUTO_INCREMENT,
+	idEstPlacee int primary key not null,
+	idDefausse int not null,
 	idCarte int not null,
 	nbCartes int not null,
-	primary key (idDefausse, idCarte),
 	foreign key (idDefausse) references Defausse(idDefausse),
 	foreign key (idCarte) references Carte(idCarte)
 );
 
 CREATE TABLE Participe
 (
+	idParticipe int primary key not null AUTO_INCREMENT,
 	idJoueur int not null,
 	idManche int not null,
-	primary key(idJoueur, idManche),
 	foreign key(idJoueur) references Joueur(idJoueur),
 	foreign key(idManche) references Manche(idManche)
 );
