@@ -14,4 +14,8 @@ class ControlerJeu{
     $vueJeu=new VueJeu();
     $vueJeu->render(VueJeu::INSCRIPTION);
   }
+
+  public function verifInscription(){
+    
+  }
 }

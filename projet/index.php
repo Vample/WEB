@@ -18,4 +18,8 @@ $app->get('/inscription/', function(){
 	(new ControlerJeu())->inscription();
 })->name('inscription');
 
+$app->post('/inscription/', function(){
+	(new ControlerJeu())->verifInscription();
+})->name('post_inscription');
+
 $app->run();

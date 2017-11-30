@@ -37,12 +37,22 @@ class VueJeu {
       $res.='</div>
              <div class="formulaire_inscription">
              <form action="/" method="post">
+              <div class="input-field">
                 <input id="login" type="text" name="login" class="active">
                 <label for="login">Nom d\'utilisateur</label>
+              </div>
+              <div class="input-field">
                 <input id="pwd" type="password" name="pwd" class="active">
                 <label for="pwd">Mot de passe</label>
-                <input type="hidden" name="img" value="1">
-                <input type="submit" value="S\'inscrire">
+              </div>
+              <div class="input-field">
+                <input id="pwd2" type="password" name="pwd2" class="active">
+                <label for="pwd">Retapez votre mot de passe</label>
+              </div>
+                <input id="img" type="hidden" name="img" value="1">
+                <button id="inscription" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">S\'inscrire
+                  <i class="material-icons right">send</i>
+                </button>
              </form>
              </div>
           </div>';
