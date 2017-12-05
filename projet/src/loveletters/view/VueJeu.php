@@ -3,6 +3,7 @@
 namespace loveletters\view;
 
 use \loveletters\view\VueHeader;
+use \loveletters\controler\ControlerJeu;
 
 class VueJeu {
   const INDEX=0;
@@ -10,14 +11,22 @@ class VueJeu {
 
   private function index(){
     $app=\Slim\Slim::getInstance();
+    $controlerJeu = new ControlerJeu();
     $res='<div class="center">
             <h2 class="white-text">Love Letters : Le Jeu</h2>
-            <p class="white-text">Qui sauras délivrer sa lettre d\'amour à la princesse ?</p>
-            <div class="center">
-              <a href="'.$app->urlFor('inscription').'" class="btn waves-effect white grey-text darken-text-2">INSCRIPTION</a>
-              <a href="#" class="btn waves-effect white grey-text darken-text-2">CONNEXION</a>
-            </div>
-          </div>';
+            <p class="white-text">Qui sauras délivrer sa lettre d\'amour à la princesse ?</p>';
+    if($controlerJeu->verify()){
+      $res.='<div class="center">
+                <a href="#" class="btn waves-effect white grey-text darken-text-2">JOUER</a>
+              </div>
+            </div>';
+    }else{
+      $res.='<div class="center">
+                <a href="'.$app->urlFor('inscription').'" class="btn waves-effect white grey-text darken-text-2">INSCRIPTION</a>
+                <a href="javascript:void(0)" class="btn waves-effect white grey-text darken-text-2 connexion_menu">CONNEXION</a>
+              </div>
+            </div>';
+    }
     return $res;
   }
 

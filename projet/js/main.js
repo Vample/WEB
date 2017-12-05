@@ -9,6 +9,26 @@ $(document).ready(function(){
     verification_inscription();
   });
 
+  $('#connected').click(function(){
+    if($('#action_box').hasClass('hide')){
+      $('#action_box').removeClass('hide');
+    }else{
+      $('#action_box').addClass('hide');
+    }
+  });
+
+  $('.connexion_menu').click(function(){
+    if($('#action_box').hasClass('hide')){
+      $('#action_box').removeClass('hide');
+    }else{
+      $('#action_box').addClass('hide');
+    }
+  });
+
+  $('#connexion').click(function(){
+    connexion();
+  });
+
   $('#login').change(function(){
     var login = $('#login').val();
     if(login.length == 0 || login.length > 24){
@@ -53,17 +73,45 @@ function verification_inscription(){
   var img = $('#img').val();
   if(login.length != 0 || login.length <= 24 || pwd1.length != 0 || pwd1.length <= 24 || pwd1==pwd2){
     //requete AJAX
-    $.post(
-      'ControlerJeu.php',
-      {
-        username : login,
-        password : pwd1,
-        image : img
-      },
-
-      function(data){
-
-      },
-    );
+    $.ajax({ url: window.location.href,
+             data: {username: login,
+                    password: pwd1,
+                    image:    img},
+             type: 'post',
+             success: function(data){
+               document.body.innerHTML = "";
+               document.write(data);
+               $('#connected').click(function(){
+                 if($('#action_box').hasClass('hide')){
+                   $('#action_box').removeClass('hide');
+                 }else{
+                   $('#action_box').addClass('hide');
+                 }
+               });
+             }
+    });
   }
+}
+
+function connexion(){
+  var login = $('#login_connexion').val();
+  var pwd = $('#pwd_connexion').val();
+  var url_connexion = 'http://'+window.location.host+'/loveletters/projet/connexion';
+  //requete AJAX
+  $.ajax({ url: url_connexion,
+           data: {username: login,
+                  password: pwd},
+           type: 'post',
+           success: function(data){
+             document.body.innerHTML = "";
+             document.write(data);
+             $('#connected').click(function(){
+               if($('#action_box').hasClass('hide')){
+                 $('#action_box').removeClass('hide');
+               }else{
+                 $('#action_box').addClass('hide');
+               }
+             });
+           }
+  });
 }

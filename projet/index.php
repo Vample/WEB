@@ -18,6 +18,14 @@ $app->get('/inscription/', function(){
 	(new ControlerJeu())->inscription();
 })->name('inscription');
 
+$app->get('/deconnexion/', function(){
+	(new ControlerJeu())->deconnexion();
+})->name('deconnexion');
+
+$app->post('/connexion/', function(){
+	(new ControlerJeu())->connexion();
+})->name('connexion');
+
 $app->post('/inscription/', function(){
 	(new ControlerJeu())->verifInscription();
 })->name('post_inscription');
