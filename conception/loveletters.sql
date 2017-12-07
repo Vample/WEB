@@ -48,11 +48,6 @@ CREATE TABLE Comporte
 	foreign key (idCarte) references Carte(idCarte)
 );
 
-CREATE TABLE Partie
-(
-	idPartie int primary key not null AUTO_INCREMENT
-);
-
 CREATE TABLE Salon
 (
 	idSalon int primary key not null AUTO_INCREMENT,
@@ -69,6 +64,13 @@ CREATE TABLE Salon_Participe
 	idUtilisateur int not null,
 	foreign key (idSalon) references Salon(idSalon),
 	foreign key (idUtilisateur) references Utilisateur(idUtilisateur)
+);
+
+CREATE TABLE Partie
+(
+	idPartie int primary key not null AUTO_INCREMENT,
+	idSalon int not null,
+	foreign key (idSalon) references Salon(idSalon)
 );
 
 CREATE TABLE Manche

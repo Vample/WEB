@@ -2,6 +2,7 @@
 
 require 'vendor/autoload.php';
 use \loveletters\controler\ControlerJeu;
+use \loveletters\controler\ControlerPartie;
 
 $app = new \Slim\Slim();
 
@@ -38,6 +39,10 @@ $app->post('/jouer/loadParticipants/', function(){
 	(new ControlerJeu())->loadParticipants();
 })->name('loadParticipants');
 
+$app->post('/jouer/launchGame/', function(){
+	(new ControlerJeu())->LaunchGame();
+})->name('launchGame');
+
 $app->get('/inscription/', function(){
 	(new ControlerJeu())->inscription();
 })->name('inscription');
@@ -57,5 +62,9 @@ $app->post('/inscription/', function(){
 $app->post('/inscription/verifPseudo/', function(){
 	(new ControlerJeu())->verifPseudo($_POST['username']);
 })->name('verifPseudo');
+
+$app->get('/partie/:id', function($id){
+	(new ControlerPartie())->partie($id);
+})->name('partie');
 
 $app->run();

@@ -8,6 +8,8 @@ use \loveletters\model\Utilisateur;
 use \loveletters\model\DBConnection;
 use \loveletters\model\Salon;
 use \loveletters\model\SalonParticipe;
+use \loveletters\model\Partie;
+use \loveletters\controler\ControlerPartie;
 
 class ControlerJeu{
   public function index(){
@@ -27,6 +29,17 @@ class ControlerJeu{
     }else{
       $this->index();
     }
+  }
+
+  public function launchGame(){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $idUtilisateurs=array();
+    $salon_participe = SalonParticipe::where('idUtilisateur','=',$_SESSION['idUtilisateur'])->first();
+    $controlerPartie = new ControlerPartie();
+    $controlerPartie->nouvellePartie($salon_participe->idSalon);
   }
 
   public function creerSalon(){
@@ -126,6 +139,7 @@ class ControlerJeu{
   }
 
   public function loadParticipants(){
+    $app=\Slim\Slim::getInstance();
     DBConnection::getInstance();
     if(!isset($_SESSION)){
       session_start();
@@ -139,6 +153,12 @@ class ControlerJeu{
       $data['start']=true;
     }else{
       $data['start']=false;
+    }
+    $partie = Partie::where('idSalon','=',$salon_participe->idSalon)->first();
+    if($partie!=null){
+      $data['game_link']=$app->urlFor('partie',array('id'=>$partie->idPartie));
+    }else{
+      $data['game_link']=null;
     }
     echo json_encode($data);
   }

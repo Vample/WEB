@@ -11,16 +11,30 @@ use \loveletters\model\Utilisateur;
 use \loveletters\model\Possede;
 use \loveletters\model\Comporte;
 use \loveletters\model\Participe;
+use \loveletters\model\SalonParticipe;
 use \loveletters\model\DBConnection;
+use \loveletters\view\VueJeu;
 
 class ControlerPartie {
 
-  public function nouvellePartie($idUtilisateurs){
+  public function partie($id){
+    $vueJeu = new VueJeu();
+    $vueJeu->render(VueJeu::PARTIE);
+  }
+
+  public function nouvellePartie($idSalon){
     DBConnection::getInstance();
+    // Instanciation des IdUtlisateurs
+      $idUtilisateurs=array();
+      $salon_participants = SalonParticipe::where('idSalon','=',$idSalon)->get();
+      foreach($salon_participants as $participant){
+        $idUtilisateurs[]=$participant->idUtilisateur;
+      }
     // Instanciation de la partie
       $partie = new Partie;
+      $partie->idSalon = $idSalon;
       $partie->save();
-      // Création des joueurs pour chaque utilisateurs
+    // Création des joueurs pour chaque utilisateurs
       $idJoueurs=array();
       foreach($idUtilisateurs as $idUser){
         $joueur = new Joueur;

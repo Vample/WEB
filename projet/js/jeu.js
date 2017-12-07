@@ -94,7 +94,11 @@ function creerSalon(){
 }
 
 function listParticipants(data){
-  console.log(data);
+  //Redirection vers la partie si la partie est prête
+  if(data.game_link!=null){
+    window.location.replace(data.game_link);
+  }
+  //Sinon rechargement de la liste des participants
   $('.salon').empty();
   var html='<div class="title center">'+
             '<h4>'+data.nom+' ('+Object.keys(data.participants).length+'/'+data.nbJoueurs+')</h4>'+
@@ -117,7 +121,10 @@ function listParticipants(data){
 
   if(data.start){
     $('#start').click(function(){
-      clearInterval(refresh);
+      var url_launchGame = 'http://'+window.location.host+'/loveletters/projet/jouer/launchGame';
+      $.ajax({ url: url_launchGame,
+               type: 'post'
+      });
     });
   }
 

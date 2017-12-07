@@ -9,6 +9,7 @@ class VueJeu {
   const INDEX=0;
   const INSCRIPTION=1;
   const JOUER=2;
+  const PARTIE=3;
 
   private function index(){
     $app=\Slim\Slim::getInstance();
@@ -70,7 +71,6 @@ class VueJeu {
   }
 
   public function jouer(){
-    $controlerJeu = new ControlerJeu();
     $res='<div class="game_list">
             <div class="title center">
               <h4>Liste des parties</h4>
@@ -118,6 +118,11 @@ class VueJeu {
     return $res;
   }
 
+  public function partie(){
+    $res='';
+    return $res;
+  }
+
   public function render($selecteur){
     $app=\Slim\Slim::getInstance();
     $res;
@@ -131,6 +136,9 @@ class VueJeu {
       break;
       case self::JOUER:
       $res=$this->jouer();
+      break;
+      case self::PARTIE:
+      $res=$this->partie();
       break;
     }
 
@@ -160,6 +168,9 @@ class VueJeu {
               <script type="text/javascript" src="'.$route_js.'/main.js"></script>';
     if($selecteur == self::JOUER){
       $html.='<script type="text/javascript" src="'.$route_js.'/jeu.js"></script>';
+    }
+    if($selecteur == self::PARTIE){
+      $html.='<script type="text/javascript" src="'.$route_js.'/partie.js"></script>';
     }
     $html.='</body>
           </html>';
