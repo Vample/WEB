@@ -25,7 +25,7 @@ CREATE TABLE Carte
 
 CREATE TABLE Possede
 (
-	idPossede int primary key not null,
+	idPossede int primary key not null AUTO_INCREMENT,
 	idJoueur int not null,
 	idCarte int not null,
 	nbCartes int,
@@ -40,7 +40,7 @@ CREATE TABLE Pioche
 
 CREATE TABLE Comporte
 (
-	idComporte int primary key not null,
+	idComporte int primary key not null AUTO_INCREMENT,
 	idPioche int not null,
 	idCarte int not null,
 	nbCartes int,
@@ -93,7 +93,7 @@ CREATE TABLE Defausse
 
 CREATE TABLE EstPlacee
 (
-	idEstPlacee int primary key not null,
+	idEstPlacee int primary key not null AUTO_INCREMENT,
 	idDefausse int not null,
 	idCarte int not null,
 	nbCartes int not null,

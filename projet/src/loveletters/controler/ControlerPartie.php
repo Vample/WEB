@@ -18,8 +18,17 @@ use \loveletters\view\VueJeu;
 class ControlerPartie {
 
   public function partie($id){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $this->pioche(1, $_SESSION['idUtilisateur']);
     $vueJeu = new VueJeu();
     $vueJeu->render(VueJeu::PARTIE);
+  }
+
+  public function main(){
+    
   }
 
   public function nouvellePartie($idSalon){
