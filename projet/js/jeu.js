@@ -1,3 +1,5 @@
+var refresh;
+
 $(document).ready(function(){
   $('#creerGame').click(function(){
     creerSalon();
@@ -29,11 +31,27 @@ $(document).ready(function(){
     var id = $('.selected').attr('id');
     rejoindre(id);
   });
+
+  $('#refresh').click(function(){
+    loadSalons();
+  });
+
 });
 
 $(window).on('load', function(){
   loadSalons();
 });
+
+function refresh_participants(){
+  var url_loadParticipants = 'http://'+window.location.host+'/loveletters/projet/jouer/loadParticipants';
+  $.ajax({ url: url_loadParticipants,
+           dataType: "json",
+           type: 'post',
+           success: function(data){
+             listParticipants(data);
+           }
+  });
+}
 
 function creerSalon(){
   var name = $('#nom').val();
@@ -59,6 +77,7 @@ function creerSalon(){
                  $('.salon').removeClass('create_game');
                  $('.salon').empty();
                  listParticipants(data);
+                 refresh = setInterval(refresh_participants, 4000);
                }
              }
     });
@@ -75,6 +94,8 @@ function creerSalon(){
 }
 
 function listParticipants(data){
+  console.log(data);
+  $('.salon').empty();
   var html='<div class="title center">'+
             '<h4>'+data.nom+' ('+Object.keys(data.participants).length+'/'+data.nbJoueurs+')</h4>'+
            '</div>';
@@ -88,21 +109,104 @@ function listParticipants(data){
         '</div>';
   });
   html+='<button id="retour" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Retour</button>';
+  if(data.start){
+    html+='<button id="start" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Démarrer</button>';
+  }
   $('.salon').append(html);
+
+
+  if(data.start){
+    $('#start').click(function(){
+      clearInterval(refresh);
+    });
+  }
+
   $('#retour').click(function(){
-    $('.salon').empty();
-    if($('.game_list')==null){
-      $('.salon').addClass('game_list');
-      $('.game_list').removeClass('salon');
-    }
-    if($('.create_game')==null){
-      $('.salon').addClass('create_game');
-      $('.create_game').removeClass('salon');
-    }
+    clearInterval(refresh);
+    var url_leaveCurrentSalon = 'http://'+window.location.host+'/loveletters/projet/jouer/leaveCurrentSalon';
+    $.ajax({ url: url_leaveCurrentSalon,
+             type: 'post',
+             complete: function(){
+               $('.salon').empty();
+               if($('.game_list').length==0){
+                 $('.salon').addClass('game_list');
+                 $('.game_list').removeClass('salon');
+                 $('.game_list').append('<div class="title center">'+
+                                           '<h4>Liste des parties</h4>'+
+                                         '</div>'+
+                                         '<button id="refresh" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">'+
+                                           '<i class="material-icons">refresh</i>'+
+                                         '</button>'+
+                                         '<div class="games">'+
+                                           '<div class="center" style="margin-top: 30px">'+
+                                             '<div class="preloader-wrapper big active">'+
+                                               '<div class="spinner-layer spinner-white-only">'+
+                                                 '<div class="circle-clipper left">'+
+                                                   '<div class="circle"></div>'+
+                                                 '</div><div class="gap-patch">'+
+                                                   '<div class="circle"></div>'+
+                                                 '</div><div class="circle-clipper right">'+
+                                                   '<div class="circle"></div>'+
+                                                 '</div>'+
+                                               '</div>'+
+                                             '</div>'+
+                                           '</div>'+
+                                         '</div>'+
+                                         '<div class="center">'+
+                                           '<button id="rejoindre" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Rejoindre</button>'+
+                                        '</div>');
+                 $('.game_list').animate({
+                   width: '60%'
+                 });
+                 $('.create_game').animate({
+                   marginLeft: '61%',
+                   width: '39%'
+                 }).show(100);
+                 $('#rejoindre').click(function(){
+                   var id = $('.selected').attr('id');
+                   rejoindre(id);
+                 });
+               }
+               if($('.create_game').length==0){
+                 $('.salon').addClass('create_game');
+                 $('.create_game').removeClass('salon');
+                 $('.create_game').append('<div class="title center">'+
+                                             '<h4>Création de partie</h4>'+
+                                           '</div>'+
+                                           '<form action="/" method="post">'+
+                                            '<div class="input-field">'+
+                                              '<input id="nom" type="text" name="nom" class="active">'+
+                                              '<label for="nom">Nom de la partie</label>'+
+                                            '</div>'+
+                                            '<div class="input-field">'+
+                                              '<input id="nbJoueurs" type="number" name="nbJoueurs" class="active">'+
+                                              '<label for="nbJoueurs">Nombre de joueurs (max 4.)</label>'+
+                                            '</div>'+
+                                            '<div class="center">'+
+                                              '<button id="creerGame" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Créer la partie</button>'+
+                                            '</div>'+
+                                           '</form>');
+                 $('.game_list').animate({
+                   width: '60%'
+                 }).show(100);
+                 $('.create_game').animate({
+                   marginLeft: '61%',
+                   width: '39%'
+                 });
+                 $('#creerGame').click(function(){
+                   creerSalon();
+                 });
+               }
+               loadSalons();
+             }
+    });
   });
+
 }
 
 function loadSalons(){
+  $('.games').empty();
+  $('.preloader-wrapper').show();
   var url_loadSalons = 'http://'+window.location.host+'/loveletters/projet/jouer/loadSalons';
   $.ajax({ url: url_loadSalons,
            dataType: "json",
@@ -122,6 +226,7 @@ function loadSalons(){
 }
 
 function listSalons(data){
+  $('.games').empty();
   var html='';
   var b = true;
   jQuery.each(data.salons, function(id, values){
@@ -155,6 +260,7 @@ function rejoindre(id){
                $('.salon').removeClass('game_list');
                $('.salon').empty();
                listParticipants(data);
+               refresh = setInterval(refresh_participants, 4000);
              }
            }
   });

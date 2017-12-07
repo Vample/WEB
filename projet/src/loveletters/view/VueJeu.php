@@ -73,7 +73,10 @@ class VueJeu {
     $controlerJeu = new ControlerJeu();
     $res='<div class="game_list">
             <div class="title center">
-              <h4>Listes des parties</h4>
+              <h4>Liste des parties</h4>
+              <button id="refresh" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">
+                <i class="material-icons">refresh</i>
+              </button>
             </div>
             <div class="games">
               <div class="center" style="margin-top: 30px">

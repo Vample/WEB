@@ -26,9 +26,17 @@ $app->post('/jouer/joinSalon/', function(){
 	(new ControlerJeu())->joinSalon($_POST['idSalon']);
 })->name('joinSalon');
 
+$app->post('/jouer/leaveCurrentSalon/', function(){
+	(new ControlerJeu())->leaveCurrentSalon();
+})->name('leaveSalon');
+
 $app->post('/jouer/loadSalons/', function(){
 	(new ControlerJeu())->loadSalons();
 })->name('loadSalons');
+
+$app->post('/jouer/loadParticipants/', function(){
+	(new ControlerJeu())->loadParticipants();
+})->name('loadParticipants');
 
 $app->get('/inscription/', function(){
 	(new ControlerJeu())->inscription();

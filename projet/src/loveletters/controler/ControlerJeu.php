@@ -42,6 +42,30 @@ class ControlerJeu{
     $this->joinSalon($salon->idSalon);
   }
 
+  public function leaveCurrentSalon(){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $participation = SalonParticipe::where('idUtilisateur','=',$_SESSION['idUtilisateur'])->first();
+    $salon = Salon::where('idSalon','=',$participation->idSalon)->first();
+    if($this->getCountParticipants($salon->idSalon)!=1){
+      if($salon->idProprio==$_SESSION['idUtilisateur']){
+        $first_participation=SalonParticipe::where('idSalon','=',$ancien_salon->idSalon)
+                                            ->where('idUtilisateur','!=',$_SESSION['idUtilisateur'])
+                                            ->first();
+        $salon->idProprio=$first_participation->idUtilisateur;
+        $salon->save();
+        $participation->forceDelete();
+      }else{
+        $participation->forceDelete();
+      }
+    }else{
+      $ancienne_participation->forceDelete();
+      $ancien_salon->forceDelete();
+    }
+  }
+
   public function joinSalon($idSalon){
     DBConnection::getInstance();
     if(!isset($_SESSION)){
@@ -91,6 +115,7 @@ class ControlerJeu{
     }else{
       $data = 'error';
     }
+    $data['start']=false;
     echo json_encode($data);
   }
 
@@ -98,6 +123,24 @@ class ControlerJeu{
     DBConnection::getInstance();
     $salon_participants = SalonParticipe::where('idSalon','=',$idSalon)->get();
     return $salon_participants->count();
+  }
+
+  public function loadParticipants(){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $salon_participe = SalonParticipe::where('idUtilisateur','=',$_SESSION['idUtilisateur'])->first();
+    $salon = Salon::where('idSalon','=',$salon_participe->idSalon)->first();
+    $data['nom'] = $salon->nom;
+    $data['nbJoueurs'] = $salon->nbJoueurs;
+    $data['participants']=$this->getSalonParticipants($salon->idSalon,$salon->idProprio);
+    if($_SESSION['idUtilisateur']==$salon->idProprio && count($data['participants'])==$salon->nbJoueurs){
+      $data['start']=true;
+    }else{
+      $data['start']=false;
+    }
+    echo json_encode($data);
   }
 
   public function getSalonParticipants($idSalon, $idProprio){

@@ -271,3 +271,13 @@ h2{
 #retour{
   margin-left: 10px;
 }
+
+#refresh{
+  position: absolute;
+  margin-top: -53px;
+  left: 48%;
+}
+
+#start{
+  margin-left: 20px;
+}

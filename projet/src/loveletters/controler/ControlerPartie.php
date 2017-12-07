@@ -85,7 +85,7 @@ class ControlerPartie {
     $possede=Possede::where('idCarte', $randomId)
                     ->where('idJoueur', $idJoueur)
                     ->first();
-    if(is_null($possede)){
+    if($possede==null){
       $possede=new Possede;
       $possede->idCarte=$randomId;
       $possede->idJoueur=$idJoueur;
