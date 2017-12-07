@@ -31,7 +31,7 @@ $(document).ready(function(){
 
   $('#login').change(function(){
     var login = $('#login').val();
-    if(login.length == 0 || login.length > 24){
+    if(pseudoTaken(login)){
       $('#login').removeClass('valid');
       $('#login').addClass('invalid');
     }else{
@@ -71,7 +71,7 @@ function verification_inscription(){
   var pwd1 = $('#pwd').val();
   var pwd2 = $('#pwd2').val();
   var img = $('#img').val();
-  if(login.length != 0 || login.length <= 24 || pwd1.length != 0 || pwd1.length <= 24 || pwd1==pwd2){
+  if(!pseudoTaken(login) && pwd1.length != 0 && pwd1.length <= 24 && pwd1==pwd2){
     //requete AJAX
     $.ajax({ url: window.location.href,
              data: {username: login,
@@ -114,4 +114,23 @@ function connexion(){
              });
            }
   });
+}
+
+function pseudoTaken(login){
+  var url_verifPseudo = 'http://'+window.location.host+'/loveletters/projet/inscription/verifPseudo';
+  var b;
+  $.ajax({ url: url_verifPseudo,
+           data: {username: login},
+           type: 'post',
+           async: false,
+           dataType: "json",
+           success: function(data){
+             if(data.taken || login.length == 0 || login.length > 24){
+               b = true;
+             }else{
+               b = false;
+             }
+           }
+  });
+  return b;
 }

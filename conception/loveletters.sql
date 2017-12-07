@@ -53,6 +53,24 @@ CREATE TABLE Partie
 	idPartie int primary key not null AUTO_INCREMENT
 );
 
+CREATE TABLE Salon
+(
+	idSalon int primary key not null AUTO_INCREMENT,
+	nom varchar(200),
+	nbJoueurs int,
+	idProprio int not null,
+	foreign key (idProprio) references Utilisateur(idUtilisateur)
+);
+
+CREATE TABLE Salon_Participe
+(
+	idSalonParticipe int primary key not null AUTO_INCREMENT,
+	idSalon int not null,
+	idUtilisateur int not null,
+	foreign key (idSalon) references Salon(idSalon),
+	foreign key (idUtilisateur) references Utilisateur(idUtilisateur)
+);
+
 CREATE TABLE Manche
 (
 	idManche int primary key not null AUTO_INCREMENT,

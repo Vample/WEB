@@ -10,6 +10,14 @@
 
 body{
   background-color: #282828;
+  height: 100%;
+  width: 100%;
+}
+
+.content{
+  margin-top: 5px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 h2{
@@ -104,7 +112,7 @@ h2{
   margin-left: 420px;
 }
 
-#login, #pwd, #pwd2{
+#login, #pwd, #pwd2, #nbJoueurs, #nom{
   color: white;
 }
 
@@ -159,4 +167,107 @@ h2{
   text-align: justify;
   font-size: 13px;
   font-family: northwood-high;
+}
+
+.salon{
+  height: 550px;
+  padding-top: 10px;
+  box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3) inset;
+}
+
+.game_list{
+  float: left;
+  padding-top: 10px;
+  height: 550px;
+  width: 60%;
+  box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3) inset;
+}
+
+.games{
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 400px;
+  overflow: auto;
+}
+
+.salon_list{
+  text-align: center;
+  color: white;
+  margin-top: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  background-color: #727272;
+  text-shadow: 2px 2px 2px black;
+  box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+  height: 64px;
+  line-height: 64px;
+  padding-left: 5px;
+  cursor: pointer;
+}
+
+.salon_list.selected{
+  background-color: #565656;
+}
+
+.create_game{
+  padding-top: 10px;
+  width: 39%;
+  margin-left: 61%;
+  height: 550px;
+  box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3) inset;
+}
+
+.create_game .input-field{
+  margin-left: 10%;
+  width: 80%;
+  margin-right: 10%;
+}
+
+.create_game button{
+  margin-top: 20px;
+}
+
+.title{
+  margin-top: 2px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+  background-color: #545454;
+  box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+}
+
+.create_game .title{
+  margin-bottom: 40px;
+}
+
+.participant{
+  color: white;
+  margin-top: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  background-color: #727272;
+  text-shadow: 2px 2px 2px black;
+  box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7);
+  height: 64px;
+  line-height: 64px;
+  padding-left: 5px;
+}
+
+.participant img{
+  vertical-align: middle;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#retour{
+  margin-left: 10px;
 }

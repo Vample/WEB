@@ -6,6 +6,8 @@ use \loveletters\view\VueJeu;
 use \loveletters\view\VueHeader;
 use \loveletters\model\Utilisateur;
 use \loveletters\model\DBConnection;
+use \loveletters\model\Salon;
+use \loveletters\model\SalonParticipe;
 
 class ControlerJeu{
   public function index(){
@@ -16,6 +18,133 @@ class ControlerJeu{
   public function inscription(){
     $vueJeu = new VueJeu();
     $vueJeu->render(VueJeu::INSCRIPTION);
+  }
+
+  public function jouer(){
+    if($this->verify()){
+      $vueJeu = new VueJeu();
+      $vueJeu->render(VueJeu::JOUER);
+    }else{
+      $this->index();
+    }
+  }
+
+  public function creerSalon(){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $salon = new Salon;
+    $salon->nom = $_POST['nom'];
+    $salon->nbJoueurs = $_POST['nbJoueurs'];
+    $salon->idProprio = $_SESSION['idUtilisateur'];
+    $salon->save();
+    $this->joinSalon($salon->idSalon);
+  }
+
+  public function joinSalon($idSalon){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    //Récupération du salon
+    $salon = Salon::where('idSalon','=',$idSalon)->first();
+    //Verification Salon non rempli
+    $ancienne_participation = SalonParticipe::where('idUtilisateur','=',$_SESSION['idUtilisateur'])->first();
+    if($this->getCountParticipants($idSalon)<$salon->nbJoueurs || ($ancienne_participation!=null && $ancienne_participation->idSalon == $idSalon)){
+      $data;
+      $data['nom']=$salon->nom;
+      $data['nbJoueurs']=$salon->nbJoueurs;
+      //Suppression d'une précédente participation de l'utilisateur
+      if($ancienne_participation != null){
+        $ancien_salon = Salon::where('idSalon','=',$ancienne_participation->idSalon)->first();
+        if($ancien_salon!=null){
+          if($ancien_salon->idSalon==$idSalon){
+            $ancienne_participation->forceDelete();
+          }else{
+            if($this->getCountParticipants($ancien_salon->idSalon)!=1){
+              //Changement de propriétaire si le salon précédent était encore plein
+              if($ancien_salon->idProprio==$_SESSION['idUtilisateur']){
+                $first_participation=SalonParticipe::where('idSalon','=',$ancien_salon->idSalon)
+                                                    ->where('idUtilisateur','!=',$_SESSION['idUtilisateur'])
+                                                    ->first();
+                $ancien_salon->idProprio=$first_participation->idUtilisateur;
+                $ancien_salon->save();
+                $ancienne_participation->forceDelete();
+              }else{
+                $ancienne_participation->forceDelete();
+              }
+            }else{
+              //Suppression du salon précédent si personne dedans
+              $ancienne_participation->forceDelete();
+              $ancien_salon->forceDelete();
+            }
+          }
+        }
+      }
+      //Ajout de la participation de l'utilisateur
+      $ma_participation = new SalonParticipe;
+      $ma_participation->idSalon=$idSalon;
+      $ma_participation->idUtilisateur=$_SESSION['idUtilisateur'];
+      $ma_participation->save();
+      $data['participants']=$this->getSalonParticipants($idSalon, $salon->idProprio);
+    }else{
+      $data = 'error';
+    }
+    echo json_encode($data);
+  }
+
+  public function getCountParticipants($idSalon){
+    DBConnection::getInstance();
+    $salon_participants = SalonParticipe::where('idSalon','=',$idSalon)->get();
+    return $salon_participants->count();
+  }
+
+  public function getSalonParticipants($idSalon, $idProprio){
+    DBConnection::getInstance();
+    $data=array();
+    $salon_participants = SalonParticipe::where('idSalon','=',$idSalon)->get();
+    foreach($salon_participants as $participant){
+      $data[$participant->idUtilisateur]=array();
+      $utilisateur = Utilisateur::where('idUtilisateur','=',$participant->idUtilisateur)->first();
+      $data[$participant->idUtilisateur]['login']=$utilisateur->login;
+      $data[$participant->idUtilisateur]['idImg']=$utilisateur->idImg;
+      if($participant->idUtilisateur == $idProprio){
+        $data[$participant->idUtilisateur]['proprio']=true;
+      }else{
+        $data[$participant->idUtilisateur]['proprio']=false;
+      }
+    }
+    return $data;
+  }
+
+  public function loadSalons(){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $salons = Salon::get();
+    $data;
+    $data['salons']=array();
+    foreach($salons as $salon){
+      $data['salons'][$salon['idSalon']]=array();
+      $data['salons'][$salon['idSalon']]['nom']=$salon['nom'];
+      $data['salons'][$salon['idSalon']]['nbUsers'] = SalonParticipe::where('idSalon','=',$salon['idSalon'])->get()->count();
+      $data['salons'][$salon['idSalon']]['nbJoueurs'] = $salon['nbJoueurs'];
+    }
+    echo json_encode($data);
+  }
+
+  public function verifPseudo($pseudo){
+    DBConnection::getInstance();
+    $user = Utilisateur::where('login',$pseudo)->first();
+    $data;
+    if($user!=null){
+      $data['taken']=true;
+    }else{
+      $data['taken']=false;
+    }
+    echo json_encode($data);
   }
 
   public function connexion(){

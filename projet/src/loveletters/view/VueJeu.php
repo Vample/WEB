@@ -8,16 +8,17 @@ use \loveletters\controler\ControlerJeu;
 class VueJeu {
   const INDEX=0;
   const INSCRIPTION=1;
+  const JOUER=2;
 
   private function index(){
     $app=\Slim\Slim::getInstance();
     $controlerJeu = new ControlerJeu();
     $res='<div class="center">
             <h2 class="white-text">Love Letters : Le Jeu</h2>
-            <p class="white-text">Qui sauras délivrer sa lettre d\'amour à la princesse ?</p>';
+            <p class="white-text">Qui saura délivrer sa lettre d\'amour à la princesse ?</p>';
     if($controlerJeu->verify()){
       $res.='<div class="center">
-                <a href="#" class="btn waves-effect white grey-text darken-text-2">JOUER</a>
+                <a href="'.$app->urlFor('jouer').'" class="btn waves-effect white grey-text darken-text-2">JOUER</a>
               </div>
             </div>';
     }else{
@@ -68,6 +69,52 @@ class VueJeu {
     return $res;
   }
 
+  public function jouer(){
+    $controlerJeu = new ControlerJeu();
+    $res='<div class="game_list">
+            <div class="title center">
+              <h4>Listes des parties</h4>
+            </div>
+            <div class="games">
+              <div class="center" style="margin-top: 30px">
+                <div class="preloader-wrapper big active">
+                  <div class="spinner-layer spinner-white-only">
+                    <div class="circle-clipper left">
+                      <div class="circle"></div>
+                    </div><div class="gap-patch">
+                      <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                      <div class="circle"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="center">
+              <button id="rejoindre" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Rejoindre</button>
+            </div>
+          </div>
+          <div class="create_game">
+            <div class="title center">
+              <h4>Création de partie</h4>
+            </div>
+            <form action="/" method="post">
+             <div class="input-field">
+               <input id="nom" type="text" name="nom" class="active">
+               <label for="nom">Nom de la partie</label>
+             </div>
+             <div class="input-field">
+               <input id="nbJoueurs" type="number" name="nbJoueurs" class="active">
+               <label for="nbJoueurs">Nombre de joueurs (max 4.)</label>
+             </div>
+             <div class="center">
+               <button id="creerGame" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Créer la partie</button>
+             </div>
+            </form>
+          </div>';
+    return $res;
+  }
+
   public function render($selecteur){
     $app=\Slim\Slim::getInstance();
     $res;
@@ -78,6 +125,9 @@ class VueJeu {
       break;
       case self::INSCRIPTION:
       $res=$this->inscription();
+      break;
+      case self::JOUER:
+      $res=$this->jouer();
       break;
     }
 
@@ -98,13 +148,17 @@ class VueJeu {
               <!--Import materialize.css-->
               <link rel="stylesheet" href="'.$route_materialize.'/css/materialize.css">
             </head>
-            <body>'.$header;
+            <body>'.$header.'<div class="content">';
     $html.=$res;
-    $html.='<!--Import jQuery before materialize.js-->
+    $html.='</div>
+            <!--Import jQuery before materialize.js-->
               <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
               <script type="text/javascript" src="'.$route_materialize.'/js/materialize.js"></script>
-              <script type="text/javascript" src="'.$route_js.'/main.js"></script>
-            </body>
+              <script type="text/javascript" src="'.$route_js.'/main.js"></script>';
+    if($selecteur == self::JOUER){
+      $html.='<script type="text/javascript" src="'.$route_js.'/jeu.js"></script>';
+    }
+    $html.='</body>
           </html>';
     echo $html;
   }
