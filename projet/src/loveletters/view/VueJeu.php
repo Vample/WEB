@@ -118,28 +118,37 @@ class VueJeu {
     return $res;
   }
 
-  public function partie($idJoueurs){
+  public function partie($joueurs){
     $res='<div class="overlay_defausse"></div>
           <button id="jouer" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Jouer</button>
-          <button class="btn waves-effect waves-light grey darken-1 defausse defausse_manche"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
+          <button class="btn waves-effect waves-light grey darken-1 defausse_manche"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
     $i = 1;
-    foreach($idJoueurs as $idJoueur){
-      if($idJoueur!=$_SESSION['idJoueur']){
+    foreach($joueurs as $id => $login){
+      if($id!=$_SESSION['idJoueur']){
         switch($i){
-          case 1: $res.='<div id="'.$idJoueur.'" class="main_top">
+          case 1: $res.='<div id="'.$id.'" class="main main_top">
                          </div>
-                         <div id="'.$idJoueur.'" class="terrain_top terrain">
-                         </div>';
+                         <div id="'.$id.'" class="terrain_top terrain">
+                         </div>
+                         <div id="'.$id.'" class="pseudo pseudo_top">'.$login.'</div>
+                         <div id="'.$id.'" class="score score_top"></div>
+                         <button id="'.$id.'"class="btn waves-effect waves-light grey darken-1 defausse defausse_top"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
                   break;
-          case 2:$res.= '<div id="'.$idJoueur.'" class="main_left">
+          case 2:$res.= '<div id="'.$id.'" class="main main_left">
                          </div>
-                         <div id="'.$idJoueur.'" class="terrain_left terrain">
-                         </div>';
+                         <div id="'.$id.'" class="terrain_left terrain">
+                         </div>
+                         <div id="'.$id.'" class="pseudo pseudo_left">'.$login.'</div>
+                         <div id="'.$id.'" class="score score_left"></div>
+                         <button id="'.$id.'"class="btn waves-effect waves-light grey darken-1 defausse defausse_left"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
                   break;
-          case 3:$res.= '<div id="'.$idJoueur.'" class="main_right">
+          case 3:$res.= '<div id="'.$id.'" class="main main_right">
                          </div>
-                         <div id="'.$idJoueur.'" class="terrain_right terrain">
-                         </div>';
+                         <div id="'.$id.'" class="terrain_right terrain">
+                         </div>
+                         <div id="'.$id.'" class="pseudo pseudo_right">'.$login.'</div>
+                         <div id="'.$id.'" class="score score_right"></div>
+                         <button id="'.$id.'" class="btn waves-effect waves-light grey darken-1 defausse defausse_right"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
                   break;
         }
         $i++;
@@ -147,13 +156,16 @@ class VueJeu {
     }
     $res.='<div id="'.$_SESSION['idJoueur'].'" class="terrain_user terrain">
           </div>
-          <div class="main_user">
+          <div class="main main_user">
           </div>
+          <div id="'.$_SESSION['idJoueur'].'" class="pseudo pseudo_user">'.$_SESSION['login'].'</div>
+          <div id="'.$_SESSION['idJoueur'].'" class="score score_user"></div>
+          <button id="'.$_SESSION['idJoueur'].'"class="btn waves-effect waves-light grey darken-1 defausse defausse_user"  type="button" name="action" action="javascript:void(0)">Defausse</button>
           <button id="pioche" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Piocher</button>';
     return $res;
   }
 
-  public function render($selecteur, $idJoueurs = null){
+  public function render($selecteur, $joueurs = null){
     $app=\Slim\Slim::getInstance();
     $res;
     switch($selecteur)
@@ -168,7 +180,7 @@ class VueJeu {
       $res=$this->jouer();
       break;
       case self::PARTIE:
-      $res=$this->partie($idJoueurs);
+      $res=$this->partie($joueurs);
       break;
     }
 

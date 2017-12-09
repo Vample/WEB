@@ -131,4 +131,12 @@ $app->post('/partie/verifCarteJoueur/:idJoueur/:idCarte', function($idJoueur, $i
 	(new ControlerPartie())->verifCarteJoueur($idJoueur, $idCarte);
 })->name('verifCarteJoueur');
 
+$app->post('/partie/getScores/', function(){
+	(new ControlerPartie())->getScores();
+})->name('getScores');
+
+$app->post('/partie/getMainsJoueurs/', function(){
+	(new ControlerPartie())->getMainsJoueurs();
+})->name('getMainJoueurs');
+
 $app->run();

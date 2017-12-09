@@ -9,6 +9,7 @@
 }
 
 html{
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 
@@ -122,6 +123,7 @@ h2{
 
 /** Carte **/
 .carte{
+  background-size: 100%;
   width: 187px;
   height: 251px;
   padding: 0;
@@ -297,6 +299,12 @@ h2{
   margin-left: 20px;
 }
 
+.main .carte{
+  vertical-align: middle;
+  display: inline-block;
+  text-align: left;
+}
+
 .main_user{
   position: absolute;
   top: 580px;
@@ -306,9 +314,6 @@ h2{
   text-align: center;
   height: 253px;
   width: 80%;
-  border-width: 1px;
-  border-color: white;
-  border-style: solid;
 }
 
 .main_user .carte:hover{
@@ -317,17 +322,44 @@ h2{
 
 .main_top{
   z-index: -1;
-  top: -10px;
+  top: -110px;
   left: 0;
   right: 0;
   margin: 0 auto;
   position: absolute;
   text-align: center;
   width: 60%;
-  height: 100px;
-  border-width: 1px;
-  border-color: white;
-  border-style: solid;
+  height: 200px;
+}
+
+.main_left{
+  z-index: -1;
+  top: 237px;
+  left: -320px;
+  position: absolute;
+  text-align: center;
+  width: 500px;
+  height: 200px;
+  transform:rotate(90deg);
+  -ms-transform:rotate(90deg); /* Internet Explorer */
+  -moz-transform:rotate(90deg); /* Firefox */
+  -webkit-transform:rotate(90deg); /* Safari et Chrome */
+  -o-transform:rotate(90deg); /* Opera */
+}
+
+.main_right{
+  z-index: -1;
+  top: 237px;
+  right: -320px;
+  position: absolute;
+  text-align: center;
+  width: 500px;
+  height: 200px;
+  transform:rotate(-90deg);
+  -ms-transform:rotate(-90deg); /* Internet Explorer */
+  -moz-transform:rotate(-90deg); /* Firefox */
+  -webkit-transform:rotate(-90deg); /* Safari et Chrome */
+  -o-transform:rotate(-90deg); /* Opera */
 }
 
 .terrain_top{
@@ -339,9 +371,6 @@ h2{
   margin: 0 auto;
   text-align: center;
   width: 50%;
-  border-width: 1px;
-  border-color: white;
-  border-style: solid;
 }
 
 .terrain_user{
@@ -353,9 +382,36 @@ h2{
   margin: 0 auto;
   text-align: center;
   width: 50%;
-  border-width: 1px;
-  border-color: white;
-  border-style: solid;
+}
+
+.terrain_right{
+  position: absolute;
+  text-align: center;
+  height: 200px;
+  bottom: 20px;
+  width: 450px;
+  right: -80px;
+  bottom: 200px;
+  transform:rotate(-90deg);
+  -ms-transform:rotate(-90deg); /* Internet Explorer */
+  -moz-transform:rotate(-90deg); /* Firefox */
+  -webkit-transform:rotate(-90deg); /* Safari et Chrome */
+  -o-transform:rotate(-90deg); /* Opera */
+}
+
+.terrain_left{
+  position: absolute;
+  text-align: center;
+  height: 200px;
+  bottom: 20px;
+  width: 450px;
+  left: -80px;
+  bottom: 200px;
+  transform:rotate(90deg);
+  -ms-transform:rotate(90deg); /* Internet Explorer */
+  -moz-transform:rotate(90deg); /* Firefox */
+  -webkit-transform:rotate(90deg); /* Safari et Chrome */
+  -o-transform:rotate(90deg); /* Opera */
 }
 
 #jouer{
@@ -374,6 +430,13 @@ h2{
 }
 
 /** Mini-carte **/
+.main:not(.main_user)>.carte{
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 149px;
+  height: 200px;
+}
+
 .terrain .carte{
   background-size: 100%;
   width: 149px;
@@ -443,6 +506,85 @@ h2{
   top: 317px;
 }
 
+.defausse_top{
+  position: absolute !important;
+  width: 122px;
+  top: 80px;
+  right: 10%;
+}
+
+.defausse_right{
+  position: absolute !important;
+  width: 122px;
+  bottom: 80px;
+  right: 40px;
+}
+
+.defausse_left{
+  position: absolute !important;
+  width: 122px;
+  bottom: 90px;
+}
+
+.defausse_user{
+  position: absolute !important;
+  width: 122px;
+  bottom: 20px;
+  left: 10%;
+}
+
+.score_user{
+  position: absolute;
+  bottom: 10px;
+}
+
+.score_top{
+  position: absolute;
+  top: 100px;
+  left: 15%;
+}
+
+.score_left{
+  position: absolute;
+  top: 100px;
+}
+
+.score_right{
+  position: absolute;
+  top: 100px;
+  right: 20px;
+}
+
+.pseudo{
+  text-shadow: 2px 2px 2px black;
+  font-size: 20px;
+  color: white;
+}
+
+.pseudo_top{
+  position: absolute;
+  top: 70px;
+  left: 15%;
+}
+
+.pseudo_left{
+  position: absolute;
+  top: 70px;
+  left: 10px;
+}
+
+.pseudo_right{
+  position: absolute;
+  top: 70px;
+  right: 10px;
+}
+
+.pseudo_user{
+  position: absolute;
+  bottom: 60px;
+  left: 20px;
+}
+
 .overlay_defausse{
   position: absolute;
   z-index: 1000;
@@ -456,6 +598,22 @@ h2{
   width: 910px;
   height: 600px;
   background-color: #353535;
+  box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3);
+}
+
+.score{
+  z-index: 500;
+  color: white;
+  background-color: #757575;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
+  text-align: center;
+  display: flex; /* contexte sur le parent */
+  flex-direction: column; /* direction d'affichage verticale */
+  justify-content: center; /* alignement vertical */
+  border-radius: 10px;
+  text-shadow: 2px 2px 2px black;
   box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3);
 }
 

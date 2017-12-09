@@ -2,12 +2,18 @@ var id_card_selected;
 var etat;
 $(document).ready(function(){
   affichageMain();
+  affichageMainsJoueurs();
   affichageTerrains();
   affichageEtat();
+  affichageScores();
 
   $('.defausse_manche').click(function(){
     $('.overlay_defausse').show();
     affichageDefausse();
+  });
+
+  $('.defausse').click(function(){
+    affichageDefausse($(this).attr('id'));
   });
 
   $('#pioche').click(function(){
@@ -68,6 +74,10 @@ $(document).ready(function(){
                     $('.overlay_defausse').empty();
                     $('.overlay_defausse').append('<h6>Choisis une carte</h6>');
                     $('.overlay_defausse').append(data);
+                    if($('.overlay_defausse .carte').length==0){
+                      jouer(id_card_selected);
+                      $('.overlay_defausse').hide();
+                    }
                     $('.overlay_defausse .carte').click(function(){
                       var idCarte=$(this).attr('id');
                       $('.overlay_defausse').hide();
@@ -117,7 +127,7 @@ $(document).ready(function(){
 
   var refresh = setInterval(function(){
     affichageEtat();
-  }, 1000);
+  }, 2000);
 });
 
 function affichageEtat(){
@@ -138,9 +148,11 @@ function affichageEtat(){
                              $('#pioche').show();
                             break;
              }
+             affichageScores();
+             affichageTerrains();
+             affichageMainsJoueurs();
              if(etat!=etat_tmp){
                affichageMain();
-               affichageTerrains();
              }
              etat=etat_tmp;
            }
@@ -176,6 +188,26 @@ function affichageMain(){
   });
 }
 
+function affichageMainsJoueurs(){
+  var url_getMainsJoueurs = 'http://'+window.location.host+'/loveletters/projet/partie/getMainsJoueurs';
+  $.ajax({ url: url_getMainsJoueurs,
+           data: {},
+           type: 'post',
+           dataType: "json",
+           success: function(data){
+             jQuery.each(data, function(id, nbCartes){
+               $('#'+id+'.main').empty();
+               for(var i = 0; i<nbCartes;i++){
+                 var url_image = "../img/dos.jpg";
+                 console.log(id+':'+i);
+                  $('#'+id+'.main').append('<div class="carte"></div>');
+                  $('#'+id+'.main .carte').css('background-image', 'url(' + url_image + ')');
+               }
+             });
+           }
+  });
+}
+
 function affichageTerrains(){
   $('.terrain').each(function(){
     var id = $(this).attr('id');
@@ -194,13 +226,14 @@ function affichageTerrains(){
 
 }
 
-function affichageDefausse(idJoueur = null, selecteur = null){
+function affichageDefausse(idJoueur = null){
   if(idJoueur!=null){
     var url_defausse = 'http://'+window.location.host+'/loveletters/projet/partie/affichageDefausse/'+idJoueur;
     $.ajax({ url: url_defausse,
              data: {},
              type: 'post',
              success: function(data){
+               $('.overlay_defausse').show();
                $('.overlay_defausse').empty();
                $('.overlay_defausse').append('<button id="close_overlay" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Fermer</button>');
                $('.overlay_defausse').append(data);
@@ -215,6 +248,7 @@ function affichageDefausse(idJoueur = null, selecteur = null){
              data: {},
              type: 'post',
              success: function(data){
+               $('.overlay_defausse').show();
                $('.overlay_defausse').empty();
                $('.overlay_defausse').append('<button id="close_overlay" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Fermer</button>');
                $('.overlay_defausse').append(data);
@@ -246,7 +280,31 @@ function jouer(id){
            success: function(data){
              affichageMain();
              affichageTerrains();
+             affichageMainsJoueurs();
              affichageEtat();
+           }
+  });
+}
+
+function affichageScores(){
+  var url_getScores = 'http://'+window.location.host+'/loveletters/projet/partie/getScores';
+  $.ajax({ url: url_getScores,
+           data: {},
+           dataType: "json",
+           type: 'post',
+           success: function(data){
+             var b = false;
+             jQuery.each(data, function(id, score){
+               var previous_score=$('#'+id+'.score').text();
+               $('#'+id+'.score').empty();
+               $('#'+id+'.score').append(score);
+               if(previous_score!=score){
+                 b = true;
+               }
+             });
+             if(b){
+               affichageMain();
+             }
            }
   });
 }

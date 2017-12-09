@@ -31,12 +31,17 @@ class ControlerPartie {
     $_SESSION['idJoueur']=$idJoueur;
     $idManche = Participe::where('idJoueur','=',$idJoueur)->max('idManche');
     $participes = Participe::where('idManche','=',$idManche)->get();
-    $idJoueurs=array();
+    $joueurs=array();
+    //$idJoueurs=array();
     foreach($participes as $participe){
-      $idJoueurs[]=$participe->idJoueur;
+      $joueur = Joueur::where('idJoueur','=',$participe->idJoueur)->first();
+      $user = Utilisateur::where('idUtilisateur','=',$joueur->idUtilisateur)->first();
+      $joueurs[$participe->idJoueur]=$user->login;
+      //$idJoueurs[]=$participe->idJoueur;
     }
+    //$this->nouvelleManche($idPartie, $idJoueurs);
     $vueJeu = new VueJeu();
-    $vueJeu->render(VueJeu::PARTIE,$idJoueurs);
+    $vueJeu->render(VueJeu::PARTIE,$joueurs);
   }
 
   public function terrain($idJoueur){
@@ -71,6 +76,9 @@ class ControlerPartie {
 
   public function nouvellePartie($idSalon){
     DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
     // Instanciation des IdUtlisateurs
       $idUtilisateurs=array();
       $salon_participants = SalonParticipe::where('idSalon','=',$idSalon)->get();
@@ -98,6 +106,9 @@ class ControlerPartie {
 
   public function nouvelleManche($idPartie, $idJoueurs){
     DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
     // Instanciation d'une nouvelle pioche
       $pioche = new Pioche;
       $pioche->save();
@@ -184,6 +195,7 @@ class ControlerPartie {
           $joueur->etat_tour='fin';
           $joueur->save();
         }
+        $n++;
       }
   }
 
@@ -283,16 +295,20 @@ class ControlerPartie {
     $joueur = Joueur::where('idJoueur','=',$idJoueur)->first();
     if(!$joueur->protect){
       $possede = Possede::where('idJoueur','=',$idJoueur)->first();
-      $defausse = Defausse::where('idJoueur','=',$_SESSION['idJoueur']);
+      $idManche = Participe::where('idJoueur','=',$_SESSION['idJoueur'])->max('idManche');
+      $defausse = Defausse::where('idJoueur','=',$_SESSION['idJoueur'])
+                          ->where('idManche','=',$idManche)
+                          ->first();
       if($defausse==null){
-        $idManche = Participe::where('idJoueur','=',$_SESSION['idJoueur'])->max('idManche');
         $defausse = new Defausse;
         $defausse->idJoueur=$_SESSION['idJoueur'];
         $defausse->idManche=$idManche;
         $defausse->save();
       }
       if($possede!=null){
-        $estPlacee = EstPlacee::where('idCarte','=',$possede->idCarte);
+        $estPlacee = EstPlacee::where('idCarte','=',$possede->idCarte)
+                              ->where('idDefausse','=',$defausse->idDefausse)
+                              ->first();
         if($estPlacee==null){
           $estPlacee = new EstPlacee;
           $estPlacee->idCarte=$possede->idCarte;
@@ -336,6 +352,21 @@ class ControlerPartie {
     }
   }
 
+  public function getScores(){
+    DBConnection::getInstance();
+    if(!isset($_SESSION)){
+      session_start();
+    }
+    $idManche = Participe::where('idJoueur','=',$_SESSION['idJoueur'])->max('idManche');
+    $participes = Participe::where('idManche','=',$idManche)->get();
+    $idJoueurs=array();
+    foreach($participes as $participe){
+      $joueur= Joueur::where('idJoueur','=',$participe->idJoueur)->first();
+      $idJoueurs[$participe->idJoueur] = $joueur->score;
+    }
+    echo json_encode($idJoueurs);
+  }
+
   public function next_turn($idJoueur){
     DBConnection::getInstance();
     $idManche = Participe::where('idJoueur','=',$idJoueur)->max('idManche');
@@ -366,6 +397,21 @@ class ControlerPartie {
     echo $joueur->etat_tour;
   }
 
+  public function getMainsJoueurs(){
+    DBConnection::getInstance();
+    $idManche = Participe::where('idJoueur','=',$_SESSION['idJoueur'])->max('idManche');
+    $participes = Participe::where('idManche','=',$idManche)->get();
+    $joueurs=array();
+    foreach($participes as $participe){
+      $possedes= Possede::where('idJoueur','=',$participe->idJoueur)->get();
+      $joueurs[$participe->idJoueur]=0;
+      foreach($possedes as $possede){
+        $joueurs[$participe->idJoueur]++;
+      }
+    }
+    echo json_encode($joueurs);
+  }
+
   public function affichageDefausse($idJoueur=null){
     DBConnection::getInstance();
     if(!isset($_SESSION)){
@@ -381,6 +427,12 @@ class ControlerPartie {
                           ->where('idJoueur','=',null)
                           ->first();
     }
+    if($defausse==null){
+      $defausse = new Defausse;
+      $defausse->idJoueur=$idJoueur;
+      $defausse->idManche=$idManche;
+      $defausse->save();
+    }
     $estPlacees = EstPlacee::where('idDefausse','=',$defausse->idDefausse)->get();
     $cartes= array();
     foreach($estPlacees as $estPlacee){
@@ -389,7 +441,9 @@ class ControlerPartie {
       }
     }
     $vueCarte = new VueCarte();
-    echo $vueCarte->cardsToHtml($cartes);
+    $res = $vueCarte->cardsToHtml($cartes);
+    $res.='<div class="carte" style="background-image: url(&quot;../img/dos.jpg&quot;);"></div>';
+    echo $res;
   }
 
   public function defausse($idCarte, $idJoueur=null, $selecteur=null){
@@ -432,6 +486,11 @@ class ControlerPartie {
       $defausse = Defausse::where('idManche','=',$idManche)
                           ->where('idJoueur','=',null)
                           ->first();
+      if($defausse==null){
+        $defausse->idManche=$idManche;
+        $defausse->idJoueur=null;
+        $defausse->save();
+      }
     }
     $estPlacee = EstPlacee::where('idDefausse','=',$defausse->idDefausse)
                           ->where('idCarte','=',$idCarte)
