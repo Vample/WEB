@@ -10,6 +10,9 @@ CREATE TABLE Joueur
 (
 	idJoueur int primary key not null AUTO_INCREMENT,
 	idUtilisateur int not null,
+	etat_tour varchar(25),
+	protect boolean not null,
+	elimine boolean not null,
 	score int,
 	foreign key (idUtilisateur) references Utilisateur(idUtilisateur)
 );
@@ -21,6 +24,15 @@ CREATE TABLE Carte
 	rang int,
 	url_illus varchar(200),
 	effet varchar(200)
+);
+
+CREATE TABLE Posee
+(
+	idPosee int primary key not null AUTO_INCREMENT,
+	idCarte int not null,
+	idJoueur int not null,
+	foreign key (idCarte) references Carte(idCarte),
+	foreign key (idJoueur) references Joueur(idJoueur)
 );
 
 CREATE TABLE Possede

@@ -5,7 +5,7 @@ namespace loveletters\view;
 class VueCarte {
 
   public function cardToHtml($carte){
-    $res='<div class="carte" style="background-image:url('.$carte['url_illus'].')">
+    $res='<div id="'.$carte['idCarte'].'" class="carte" style="background-image:url('.$carte['url_illus'].')">
               <div class="rang">
                 <h2>'.$carte['rang'].'</h2>
               </div>

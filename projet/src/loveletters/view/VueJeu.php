@@ -118,12 +118,42 @@ class VueJeu {
     return $res;
   }
 
-  public function partie(){
-    $res='';
+  public function partie($idJoueurs){
+    $res='<div class="overlay_defausse"></div>
+          <button id="jouer" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Jouer</button>
+          <button class="btn waves-effect waves-light grey darken-1 defausse defausse_manche"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
+    $i = 1;
+    foreach($idJoueurs as $idJoueur){
+      if($idJoueur!=$_SESSION['idJoueur']){
+        switch($i){
+          case 1: $res.='<div id="'.$idJoueur.'" class="main_top">
+                         </div>
+                         <div id="'.$idJoueur.'" class="terrain_top terrain">
+                         </div>';
+                  break;
+          case 2:$res.= '<div id="'.$idJoueur.'" class="main_left">
+                         </div>
+                         <div id="'.$idJoueur.'" class="terrain_left terrain">
+                         </div>';
+                  break;
+          case 3:$res.= '<div id="'.$idJoueur.'" class="main_right">
+                         </div>
+                         <div id="'.$idJoueur.'" class="terrain_right terrain">
+                         </div>';
+                  break;
+        }
+        $i++;
+      }
+    }
+    $res.='<div id="'.$_SESSION['idJoueur'].'" class="terrain_user terrain">
+          </div>
+          <div class="main_user">
+          </div>
+          <button id="pioche" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Piocher</button>';
     return $res;
   }
 
-  public function render($selecteur){
+  public function render($selecteur, $idJoueurs = null){
     $app=\Slim\Slim::getInstance();
     $res;
     switch($selecteur)
@@ -138,7 +168,7 @@ class VueJeu {
       $res=$this->jouer();
       break;
       case self::PARTIE:
-      $res=$this->partie();
+      $res=$this->partie($idJoueurs);
       break;
     }
 

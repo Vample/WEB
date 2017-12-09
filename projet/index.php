@@ -4,6 +4,10 @@ require 'vendor/autoload.php';
 use \loveletters\controler\ControlerJeu;
 use \loveletters\controler\ControlerPartie;
 
+if(!isset($_SESSION)){
+	session_start();
+}
+
 $app = new \Slim\Slim();
 
 $app->get('/css',function(){})->name('css');
@@ -66,5 +70,65 @@ $app->post('/inscription/verifPseudo/', function(){
 $app->get('/partie/:id', function($id){
 	(new ControlerPartie())->partie($id);
 })->name('partie');
+
+$app->post('/partie/main', function(){
+	(new ControlerPartie())->main();
+})->name('main');
+
+$app->post('/partie/pioche', function(){
+	(new ControlerPartie())->pioche($_SESSION['idJoueur']);
+})->name('pioche');
+
+$app->post('/partie/terrain/:id', function($id){
+	(new ControlerPartie())->terrain($id);
+})->name('terrain');
+
+$app->post('/partie/jouer/:id', function($id){
+	(new ControlerPartie())->jouer($id);
+})->name('jouerCarte');
+
+$app->post('/partie/affichageDefausse', function(){
+	(new ControlerPartie())->affichageDefausse();
+})->name('affichageDefausseManche');
+
+$app->post('/partie/affichageDefausse/:id', function($id){
+	(new ControlerPartie())->affichageDefausse($id);
+})->name('affichageDefausseJoueur');
+
+$app->post('/partie/getEtat/', function(){
+	(new ControlerPartie())->getEtat($_SESSION['idJoueur']);
+})->name('getEtat');
+
+$app->post('/partie/effetGarde/', function(){
+	(new ControlerPartie())->effetGarde();
+})->name('effetGarde');
+
+$app->post('/partie/effetPretre/:id', function($id){
+	(new ControlerPartie())->effetPretre($id);
+})->name('effetPretre');
+
+$app->post('/partie/effetBaron/:id', function($id){
+	(new ControlerPartie())->effetBaron($id);
+})->name('effetBaron');
+
+$app->post('/partie/effetPrince/:id', function($id){
+	(new ControlerPartie())->effetPrince($id);
+})->name('effetPrince');
+
+$app->post('/partie/effetRoi/:id', function($id){
+	(new ControlerPartie())->effetRoi($id);
+})->name('effetRoi');
+
+$app->post('/partie/completeEffetBaron/:idJoueur/:idCarte', function($idJoueur, $idCarte){
+	(new ControlerPartie())->completeEffetBaron($idJoueur, $idCarte);
+})->name('completeEffetBaron');
+
+$app->post('/partie/choixJoueur/', function(){
+	(new ControlerPartie())->choixJoueur();
+})->name('choixJoueur');
+
+$app->post('/partie/verifCarteJoueur/:idJoueur/:idCarte', function($idJoueur, $idCarte){
+	(new ControlerPartie())->verifCarteJoueur($idJoueur, $idCarte);
+})->name('verifCarteJoueur');
 
 $app->run();

@@ -77,7 +77,7 @@ function creerSalon(){
                  $('.salon').removeClass('create_game');
                  $('.salon').empty();
                  listParticipants(data);
-                 refresh = setInterval(refresh_participants, 4000);
+                 refresh = setInterval(refresh_participants, 1000);
                }
              }
     });
@@ -267,7 +267,7 @@ function rejoindre(id){
                $('.salon').removeClass('game_list');
                $('.salon').empty();
                listParticipants(data);
-               refresh = setInterval(refresh_participants, 4000);
+               refresh = setInterval(refresh_participants, 1000);
              }
            }
   });

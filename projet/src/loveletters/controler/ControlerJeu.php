@@ -212,7 +212,9 @@ class ControlerJeu{
 
   public function connexion(){
     DBConnection::getInstance();
-    session_start();
+    if(!isset($_SESSION)){
+      session_start();
+    }
     $user = Utilisateur::where('login',$_POST['username'])->first();
     if(password_verify($_POST['password'],$user['pwd'])){
       $_SESSION['connected']=true;
