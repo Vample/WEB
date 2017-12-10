@@ -10,6 +10,7 @@ use \loveletters\model\Salon;
 use \loveletters\model\SalonParticipe;
 use \loveletters\model\Partie;
 use \loveletters\controler\ControlerPartie;
+use \loveletters\model\Joueur;
 
 class ControlerJeu{
   public function index(){
@@ -23,9 +24,30 @@ class ControlerJeu{
   }
 
   public function jouer(){
+    if(!isset($_SESSION)){
+      session_start();
+    }
     if($this->verify()){
-      $vueJeu = new VueJeu();
-      $vueJeu->render(VueJeu::JOUER);
+      //Si une partie est déjà en cours
+      if(isset($_SESSION['idPartie'])){
+        if(isset($_SESSION['idJoueur'])){
+          $joueur = Joueur::where('idJoueur','=',$_SESSION['idJoueur']);
+          if($joueur->idUtilisateur==$_SESSION['idUtilisateur']){
+            $controlerPartie = new ControlerPartie();
+            $controlerPartie->partie($_SESSION['idPartie']);
+          }else{
+            $vueJeu = new VueJeu();
+            $vueJeu->render(VueJeu::JOUER);
+          }
+        }else{
+          $vueJeu = new VueJeu();
+          $vueJeu->render(VueJeu::JOUER);
+        }
+      }else{
+        $vueJeu = new VueJeu();
+        $vueJeu->render(VueJeu::JOUER);
+      }
+
     }else{
       $this->index();
     }
@@ -145,6 +167,7 @@ class ControlerJeu{
       session_start();
     }
     $salon_participe = SalonParticipe::where('idUtilisateur','=',$_SESSION['idUtilisateur'])->first();
+
     $salon = Salon::where('idSalon','=',$salon_participe->idSalon)->first();
     $data['nom'] = $salon->nom;
     $data['nbJoueurs'] = $salon->nbJoueurs;

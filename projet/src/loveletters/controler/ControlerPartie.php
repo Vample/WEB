@@ -12,6 +12,7 @@ use \loveletters\model\EstPlacee;
 use \loveletters\model\Possede;
 use \loveletters\model\Comporte;
 use \loveletters\model\Participe;
+use \loveletters\model\Salon;
 use \loveletters\model\SalonParticipe;
 use \loveletters\model\Posee;
 use \loveletters\model\DBConnection;
@@ -109,6 +110,36 @@ class ControlerPartie {
     if(!isset($_SESSION)){
       session_start();
     }
+    // Verif Si personne n'a gagné
+      foreach($idJoueurs as $idJoueur){
+        $joueur = Joueur::where('idJoueur','=',$idJoueur)->first();
+        switch(count($idJoueurs)){
+          case 2: if($joueur->score==7){
+                    //Le joueur a gagné
+                    unset($_SESSION['idPartie']);
+                    unset($_SESSION['idJoueur']);
+                    $vueJeu = new VueJeu();
+                    $vueJeu->render(VueJeu::JOUER);
+                  }
+                  break;
+          case 3: if($joueur->score==5){
+                    //Le joueur a gagné
+                    unset($_SESSION['idPartie']);
+                    unset($_SESSION['idJoueur']);
+                    $vueJeu = new VueJeu();
+                    $vueJeu->render(VueJeu::JOUER);
+                  }
+                  break;
+          case 4: if($joueur->score==4){
+                    //Le joueur a gagné
+                    unset($_SESSION['idPartie']);
+                    unset($_SESSION['idJoueur']);
+                    $vueJeu = new VueJeu();
+                    $vueJeu->render(VueJeu::JOUER);
+                  }
+                  break;
+        }
+      }
     // Instanciation d'une nouvelle pioche
       $pioche = new Pioche;
       $pioche->save();
@@ -529,7 +560,42 @@ class ControlerPartie {
         }
       }
       shuffle($pioche);
-      $randomId=$pioche[array_rand($pioche, 1)];
+      if(empty($pioche)){
+        $idManche = Participe::where('idJoueur','=',$_SESSION['idJoueur'])->max('idManche');
+        $participes = Participe::where('idManche','=',$idManche)->get();
+        $joueurs=array();
+        $idJoueurs=array();
+        foreach($participes as $participe){
+          $idJoueurs[]=$participe->idJoueur;
+          $joueur= Joueur::where('idJoueur','=',$participe->idJoueur)->first();
+          if(!$joueur->elimine){
+            $joueurs[]=$joueur;
+          }
+        }
+        $gagnants=array();
+        $meilleure_val=0;
+        foreach($joueurs as $joueur){
+          $possede = Possede::where('idJoueur','=',$joueur->idJoueur)->first();
+          $val=$possede->idCarte;
+          if($meilleure_val<$val){
+            $meilleur_val=$val;
+            $gagnants=array();
+            $gagnants[]=$joueur;
+          }else{
+            if($meilleure_val==$val){
+              $gagnants[]=$joueur;
+            }
+          }
+        }
+        foreach($gagnants as $gagnant){
+          $gagnant->score=$gagnant->score+1;
+          $gagnant->save();
+        }
+        $this->nouvelleManche($_SESSION['idPartie'],$idJoueurs);
+        exit();
+      }else{
+          $randomId=$pioche[array_rand($pioche, 1)];
+      }
       $possede=Possede::where('idCarte', $randomId)
                       ->where('idJoueur', $idJoueur)
                       ->first();
