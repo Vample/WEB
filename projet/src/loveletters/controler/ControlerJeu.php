@@ -29,25 +29,8 @@ class ControlerJeu{
     }
     if($this->verify()){
       //Si une partie est déjà en cours
-      if(isset($_SESSION['idPartie'])){
-        if(isset($_SESSION['idJoueur'])){
-          $joueur = Joueur::where('idJoueur','=',$_SESSION['idJoueur']);
-          if($joueur->idUtilisateur==$_SESSION['idUtilisateur']){
-            $controlerPartie = new ControlerPartie();
-            $controlerPartie->partie($_SESSION['idPartie']);
-          }else{
-            $vueJeu = new VueJeu();
-            $vueJeu->render(VueJeu::JOUER);
-          }
-        }else{
-          $vueJeu = new VueJeu();
-          $vueJeu->render(VueJeu::JOUER);
-        }
-      }else{
         $vueJeu = new VueJeu();
         $vueJeu->render(VueJeu::JOUER);
-      }
-
     }else{
       $this->index();
     }
@@ -111,7 +94,7 @@ class ControlerJeu{
     //Verification Salon non rempli
     $ancienne_participation = SalonParticipe::where('idUtilisateur','=',$_SESSION['idUtilisateur'])->first();
     if($this->getCountParticipants($idSalon)<$salon->nbJoueurs || ($ancienne_participation!=null && $ancienne_participation->idSalon == $idSalon)){
-      $data;
+      $data=array();
       $data['nom']=$salon->nom;
       $data['nbJoueurs']=$salon->nbJoueurs;
       //Suppression d'une précédente participation de l'utilisateur

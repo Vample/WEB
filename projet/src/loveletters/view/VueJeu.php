@@ -131,24 +131,21 @@ class VueJeu {
                          <div id="'.$id.'" class="terrain_top terrain">
                          </div>
                          <div id="'.$id.'" class="pseudo pseudo_top">'.$login.'</div>
-                         <div id="'.$id.'" class="score score_top"></div>
-                         <button id="'.$id.'"class="btn waves-effect waves-light grey darken-1 defausse defausse_top"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
+                         <div id="'.$id.'" class="score score_top"></div>';
                   break;
           case 2:$res.= '<div id="'.$id.'" class="main main_left">
                          </div>
                          <div id="'.$id.'" class="terrain_left terrain">
                          </div>
                          <div id="'.$id.'" class="pseudo pseudo_left">'.$login.'</div>
-                         <div id="'.$id.'" class="score score_left"></div>
-                         <button id="'.$id.'"class="btn waves-effect waves-light grey darken-1 defausse defausse_left"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
+                         <div id="'.$id.'" class="score score_left"></div>';
                   break;
           case 3:$res.= '<div id="'.$id.'" class="main main_right">
                          </div>
                          <div id="'.$id.'" class="terrain_right terrain">
                          </div>
                          <div id="'.$id.'" class="pseudo pseudo_right">'.$login.'</div>
-                         <div id="'.$id.'" class="score score_right"></div>
-                         <button id="'.$id.'" class="btn waves-effect waves-light grey darken-1 defausse defausse_right"  type="button" name="action" action="javascript:void(0)">Defausse</button>';
+                         <div id="'.$id.'" class="score score_right"></div>';
                   break;
         }
         $i++;
@@ -160,7 +157,6 @@ class VueJeu {
           </div>
           <div id="'.$_SESSION['idJoueur'].'" class="pseudo pseudo_user">'.$_SESSION['login'].'</div>
           <div id="'.$_SESSION['idJoueur'].'" class="score score_user"></div>
-          <button id="'.$_SESSION['idJoueur'].'"class="btn waves-effect waves-light grey darken-1 defausse defausse_user"  type="button" name="action" action="javascript:void(0)">Defausse</button>
           <button id="pioche" class="btn waves-effect waves-light grey darken-1" type="button" name="action" action="javascript:void(0)">Piocher</button>';
     return $res;
   }

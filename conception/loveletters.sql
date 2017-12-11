@@ -122,11 +122,11 @@ CREATE TABLE Participe
 	foreign key(idManche) references Manche(idManche)
 );
 
-INSERT INTO Carte VALUES (1, 'Garde', 1, '', 'Choisissez un joueur et essayez de deviner la carte qu\'il a en main (sauf Garde) si vous tombez juste le joueur est elimine de la manche.'),
-			 (2, 'Pretre', 2, '', 'Regardez la main d\'un autre joueur.'),
-			 (3, 'Baron', 3, '', 'Comparez votre carte avec celle d\'un autre joueur, celui qui a la carte avec la plus faible valeur est éliminé de la manche.'),
-			 (4, 'Servante', 4, '', 'Jusqu\'au prochain tour vous etes protege des effets des cartes des autres joueurs.'),
-			 (5, 'Prince', 5, '', 'Choisissez un joueur (y compris vous), celui-ci défausse la carte qu\'il a en main pour en piocher une nouvelle.'),
-			 (6, 'Roi', 6, '', 'Echangez votre main avec un autre joueur de votre choix.'),
-			 (7, 'Comtesse', 7, '', 'Si vous avez cette carte en main en meme temps que le Roi ou le Prince, alors vous devez defausser la carte de la Comtesse'),
-			 (8, 'Princesse', 8, '', 'Si vous defaussez cette carte vous etes elimine de la manche');
+INSERT INTO Carte VALUES (1, 'Garde', 1, 'http://localhost/loveletters/projet/img/model/guard.png', 'Choisissez un joueur et essayez de deviner la carte qu\'il a en main (sauf Garde) si vous tombez juste le joueur est elimine de la manche.'),
+			 (2, 'Pretre', 2, 'http://localhost/loveletters/projet/img/model/priest.png', 'Regardez la main d\'un autre joueur.'),
+			 (3, 'Baron', 3, 'http://localhost/loveletters/projet/img/model/Baron.png', 'Comparez votre carte avec celle d\'un autre joueur, celui qui a la carte avec la plus faible valeur est éliminé de la manche.'),
+			 (4, 'Servante', 4, 'http://localhost/loveletters/projet/img/model/handmaid.png', 'Jusqu\'au prochain tour vous etes protege des effets des cartes des autres joueurs.'),
+			 (5, 'Prince', 5, 'http://localhost/loveletters/projet/img/model/Prince.png', 'Choisissez un joueur (y compris vous), celui-ci défausse la carte qu\'il a en main pour en piocher une nouvelle.'),
+			 (6, 'Roi', 6, 'http://localhost/loveletters/projet/img/model/king.png', 'Echangez votre main avec un autre joueur de votre choix.'),
+			 (7, 'Comtesse', 7, 'http://localhost/loveletters/projet/img/model/countess.png', 'Si vous avez cette carte en main en meme temps que le Roi ou le Prince, alors vous devez defausser la carte de la Comtesse'),
+			 (8, 'Princesse', 8, 'http://localhost/loveletters/projet/img/model/Princess.png', 'Si vous defaussez cette carte vous etes elimine de la manche');

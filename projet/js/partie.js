@@ -199,7 +199,6 @@ function affichageMainsJoueurs(){
                $('#'+id+'.main').empty();
                for(var i = 0; i<nbCartes;i++){
                  var url_image = "../img/dos.jpg";
-                 console.log(id+':'+i);
                   $('#'+id+'.main').append('<div class="carte"></div>');
                   $('#'+id+'.main .carte').css('background-image', 'url(' + url_image + ')');
                }
